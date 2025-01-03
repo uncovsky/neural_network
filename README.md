@@ -14,6 +14,7 @@ Building the implementation can be done via
     $ mkdir build && cd build && cmake -S ..
     
 Then run it on the Fashion-MNIST dataset with default hyperparameters. This will output test and train predictions in the current folder:
+
     $ make && ./neural-net
 
 Afterwards, you can evaluate the accuracy on the dataset using the provided evaluator like so:
