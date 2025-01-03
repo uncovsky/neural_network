@@ -1,6 +1,56 @@
 #include "optimizer.hpp" 
 
 
+/* Manually calculate softmax&CE loss given logits and correct labels.
+ *
+ * This is later used as input to the backpropagation algorithm in Trainer.
+ */
+
+float cross_entropy_loss( const Matrix &logits,
+                          const std::vector< int > &labels,
+                          Matrix &derivatives ){
+
+    Matrix out_derivatives = logits;
+
+    float batch_size = logits.cols;
+    float loss = 0;
+
+    // Go over whole batch
+    for ( size_t col = 0; col < batch_size; col++ ) {
+
+        float denom = 0;
+
+        // Assuming nonempty outputs
+        float max = logits.at(0, col);
+
+
+        // calculate max logit in this sample
+        for ( size_t row = 0; row < logits.rows; row++ ) {
+            max = std::max( max, logits.at( row , col ) );
+        }
+
+        // calculate denomiator of softmax sigma(y - maximum)
+        // subtracting max from exponent makes computation a lot more stable
+        for ( size_t row = 0; row < logits.rows; row++ ) {
+            denom += std::exp( logits.at( row , col ) - max );
+        }
+
+        // calculate softmax, derivatives and loss for each output in this
+        // sample
+        for ( size_t row = 0; row < logits.rows; row++ ) {
+            int match = ( labels[col] == row );
+            float smax = std::exp( logits.at( row, col ) - max ) / denom;
+            out_derivatives.at( row, col ) = smax - match;
+            loss -= match * ( logits.at(row, col) - max  - std::log(denom));
+        }
+    }
+
+    derivatives = std::move( out_derivatives );
+    derivatives.multiply_scalar( 1/batch_size );
+
+    return loss;
+}
+
 
 AdamOptimizer::AdamOptimizer( NeuralNet *m, float lr, 
                               float beta1, float beta2 ) : _lr( lr ),

@@ -1,4 +1,5 @@
 #include "trainer.hpp"
+#include "model.hpp"
 
 
 Trainer::Trainer( NeuralNet *m, AdamOptimizer *opt, 

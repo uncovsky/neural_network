@@ -1,6 +1,7 @@
 add_library( rng random.cpp )
-add_executable( neuronka main.cpp )
+add_library( dependencies trainer.cpp model.cpp optimizer.cpp )
 
-target_include_directories( neuronka PRIVATE testing )
+add_executable( neural-net main.cpp )
 
-target_link_libraries( neuronka rng )
+target_include_directories( neural-net PRIVATE testing )
+target_link_libraries( neural-net rng dependencies )

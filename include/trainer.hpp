@@ -1,5 +1,6 @@
 #pragma once
 #include "model.hpp"
+#include "optimizer.hpp"
 #include <chrono>
 
 

@@ -1,11 +1,10 @@
 #include <iostream>
 #include <vector>
 
-#include "activations.hpp"
-#include "lingebra.hpp"
-#include "model.hpp"
+
+#include "loader.hpp"
 #include "optimizer.hpp"
-#include "random.hpp"
+#include "trainer.hpp"
 
 
 int main() {
@@ -21,29 +20,32 @@ int main() {
 
     NeuralNet net( std::move( layers ) );
 
+    /*
+     *  Hyperparameter settings.
+     */
+
+
     float lr = 0.001;
     float beta1 = 0.9;
     float beta2 = 0.999;
 
-    size_t epochs = 30;
+    size_t epochs = 40;
     size_t batch_size = 64;
 
     Loader load;
-    std::vector< std::vector< float > > train_data = load.load_vectors_from_csv( "data/fashion_mnist_train_vectors.csv" );
-    std::vector< int > train_labels = load.load_labels_from_csv( "data/fashion_mnist_train_labels.csv" );
+    std::vector< std::vector< float > > train_data = load.load_vectors_from_csv( "../data/fashion_mnist_train_vectors.csv" );
+    std::vector< int > train_labels = load.load_labels_from_csv( "../data/fashion_mnist_train_labels.csv" );
 
-    std::vector< std::vector< float > > test_data = load.load_vectors_from_csv( "data/fashion_mnist_test_vectors.csv" );
-    std::vector< int > test_labels = load.load_labels_from_csv( "data/fashion_mnist_test_labels.csv" );
+    std::vector< std::vector< float > > test_data = load.load_vectors_from_csv( "../data/fashion_mnist_test_vectors.csv" );
+    std::vector< int > test_labels = load.load_labels_from_csv( "../data/fashion_mnist_test_labels.csv" );
 
     auto [mean, sd] = load.normalize_dataset(train_data);
     load.normalize_dataset(test_data, mean, sd);
-
 
     AdamOptimizer opt( &net, lr, beta1, beta2 );
 
     Trainer trainer( &net, &opt, train_data, train_labels );
     trainer.train( epochs, batch_size );
-
 
     // Output predictions of the model
     std::ofstream test_output("test_predictions.csv");
