@@ -11,9 +11,11 @@ Some other implemented features include:
 
 Building the implementation can be done via
 
+    $ mkdir build && cd build && cmake -S ..
+    
+Then run it on the Fashion-MNIST dataset with default hyperparameters. This will output test and train predictions in the current folder:
+    $ make && ./neural-net
 
-  $ mkdir build && cd build && cmake -S ..
-  $ make && ./neural-net
+Afterwards, you can evaluate the accuracy on the dataset using the provided evaluator like so:
 
-Afterwards, you can evaluate the accuracy on the Fashion-MNIST dataset using the provided evaluator like so:
-  $ python3 ../evaluator/evaluate.py test_predictions.csv ../data/fashion_mnist_test_labels.csv 
+    $ python3 ../evaluator/evaluate.py test_predictions.csv ../data/fashion_mnist_test_labels.csv 
