@@ -17,6 +17,7 @@ Then run it on the Fashion-MNIST dataset with default hyperparameters. This will
 
     $ make && ./neural-net
 
+Note that running the training algorithm for the default 40 epochs may take around 5 minutes.
 Afterwards, you can evaluate the accuracy on the dataset using the provided evaluator like so:
 
     $ python3 ../evaluator/evaluate.py test_predictions.csv ../data/fashion_mnist_test_labels.csv 
