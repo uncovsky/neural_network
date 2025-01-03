@@ -10,6 +10,8 @@ Some other implemented features include:
   - Adam stochastic optimizer
 
 Building the implementation can be done via
+
+
   $ mkdir build && cd build && cmake -S ..
   $ make && ./neural-net
 
